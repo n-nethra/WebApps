@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+<head>
+  <title>Flashcard App</title>
+  <style>
+    .flashcard {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      background-color: #ffc2bb;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .flashcard .content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .createCardButton{
+      background-color: #ffc2bb;
+      color:#77170c;
+    }
+    .impBack{
+      background-color:#ff978c;
+    }
+    .impFront{
+      background-color:#ff978c;
+    }
+
+    .flashcard .front {
+      display: flex;
+    }
+
+    .flashcard .back {
+      display: none;
+    }
+
+    .flashcard.flipped .front {
+      display: none;
+    }
+
+    .flashcard.flipped .back {
+      display: flex;
+    }
+
+    .flashcard .delete-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: #d14130;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+        .makeTransparent{
+      background: none;
+      border:none;
+    }
+  </style>
+</head>
+<body>
+<div class = "hi">
+  <div id="flashcards"></div>
+  <input class = "impFront" type="text" id="frontInput" placeholder="Front side"/>
+  <input class = "impBack" type="text" id="backInput" placeholder="Back side" />
+  <button class = "createCardButton" onclick="createFlashcard()">Create Flashcard</button>
+<div>
+  <script>
+    var flashcardsContainer = document.getElementById('flashcards');
+    var frontInput = document.getElementById('frontInput');
+    var backInput = document.getElementById('backInput');
+
+    function createFlashcard() {
+      var front = frontInput.value;
+      var back = backInput.value;
+
+      if (front && back) {
+        var flashcard = document.createElement('div');
+        flashcard.classList.add('flashcard');
+        flashcard.innerHTML = `
+          <div class="content">
+            <div class="front">${front}</div>
+            <div class="back">${back}</div>
+          </div>
+          <button class="delete-button" onclick="deleteFlashcard(this)">X</button>
+        `;
+        flashcard.addEventListener('click', function () {
+          this.classList.toggle('flipped');
+        });
+
+        flashcardsContainer.appendChild(flashcard);
+        frontInput.value = '';
+        backInput.value = '';
+      }
+    }
+
+    function deleteFlashcard(button) {
+      var flashcard = button.parentNode;
+      flashcardsContainer.removeChild(flashcard);
+    }
+  </script>
+    <button type="button" onclick = "window.location.href = 'index.html'" class = "makeTransparent">
+  <img class = "sun" src = "sun.png.png">
+</button> 
+
+</body>
+</html>

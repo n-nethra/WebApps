@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <style>
+
+.makeTransparent{
+      background: none;
+      border:none;
+}
+.center {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+}
+    
+  .todolistStudy{
+    background-color: #fff595;
+    color: #5b4d0c;
+  }
+
+  .flashcardsStudy{
+    background-color: #ff9c95;
+    color: #5b130c;
+  }   
+
+  .farm{
+    length: 600px;
+    width:600px;
+    padding-left: 20%;
+  }  
+
+  </style>
+</head>
+<body> 
+<div class = "topbar">
+
+</div>
+<div class = "timer">
+  <h1>Study Timer</h1>
+    
+    <form name="form_main">
+        <div class = "center">
+    <img src = "alarmClock.png" style = "width: 30vw;"/>
+    <div class = "centered">
+          <div class = "con">
+      <span id="hour">00</span>:<span id="minute">00</span>:<span id="second">00</span>:<span id="millisecond">000</span>
+    </div>
+  </div>
+      
+  </div>
+    <br />
+    <button type="button" id="start">start</button>
+    <button type="button" id="pause">pause</button>
+    <button type="button" id="reset">reset</button>
+  </form>
+</div>
+
+  <div>
+    <button type="button" class = "todolistStudy" onclick = "window.location.href = 'todo.html'">to-do list</button>
+  </div>
+  <button type="button" class ="flashcardsStudy" onclick = "window.location.href = 'flashcards.html'">flashcards</button>
+  <script src="script.js"></script> <br>
+      <button type="button" onclick = "window.location.href = 'index.html'" class = "makeTransparent">
+  <img class = "sun" src = "sun.png.png">
+</button>
+  <img src = "farmer.png" class = "farm">
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <style>
+    ul {list-style-type: none;}
+    body {font-family: Verdana, sans-serif;}
+
+    /* Month header */
+    .month {
+      padding: 70px 25px;
+      width: 93vw;
+      text-shadow: 1px 1px 6px #003311;
+      background-image: url("watermelon.png");
+      background-size: 110%;
+      text-align: center;
+    }
+
+    /* Month list */
+    .month ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    .month ul li {
+      color: white;
+      font-size: 20px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    /* Previous button inside month header */
+    .month .prev {
+      float: left;
+      padding-top: 10px;
+    }
+
+    /* Next button */
+    .month .next {
+      float: right;
+      padding-top: 10px;
+    }
+
+    /* Weekdays (Mon-Sun) */
+    .weekdays {
+      margin: 0;
+      padding: 10px 0;
+      background-color:#ddd;
+    }
+
+    .weekdays li {
+      display: inline-block;
+      width: 13.6%;
+      color: #666;
+      text-align: center;
+    }
+
+    /* Days (1-31) */
+    .days {
+      padding: 10px 0;
+      background: #eee;
+      margin: 0;
+    }
+
+    .days li {
+      list-style-type: none;
+      display: inline-block;
+      width: 13.6%;
+      text-align: center;
+      margin-bottom: 5px;
+      font-size:12px;
+      color: #777;
+      cursor: pointer;
+    }
+
+    /* Highlight the "current" day */
+    .days li .active {
+      padding: 5px;
+      background: #50C878;
+      color: white !important
+    }
+
+    .makeTransparent{
+      background: none;
+      border:none;
+    }
+
+    .event-list {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .event-list h3 {
+      margin: 0;
+    }
+  </style>
+</head>
+  
+<body>
+  <div class="month">
+    <ul>
+      <!--<li class="prev">&#10094;</li>
+      <li class="next">&#10095;</li>-->
+      <li>May<br><span style="font-size:18px">2023</span></li>
+    </ul>
+  </div>
+  <ul class="weekdays">
+    <li>Mo</li>
+    <li>Tu</li>
+    <li>We</li>
+    <li>Th</li>
+    <li>Fr</li>
+    <li>Sa</li>
+    <li>Su</li>
+  </ul>
+
+  <ul class="days">
+    <li class="event-day">1</li>
+    <li class="event-day">2</li>
+    <li class="event-day">3</li>
+    <li class="event-day">4</li>
+    <li class="event-day">5</li>
+    <li class="event-day">6</li>
+    <li class="event-day">7</li>
+    <li class="event-day">8</li>
+    <li class="event-day">9</li>
+    <li class="event-day">10</li>
+    <li class="event-day">11</li>
+    <li class="event-day">12</li>
+    <li class="event-day"><span class = "active">13</span></li>
+    <li class="event-day">14</li>
+    <li class="event-day">15</li>
+    <li class="event-day">16</li>
+    <li class="event-day">17</li>
+    <li class="event-day">18</li>
+    <li class="event-day">19</li>
+    <li class="event-day">20</li>
+    <li class="event-day">21</li>
+    <li class="event-day">22</li>
+    <li class="event-day">23</li>
+    <li class="event-day">24</li>
+    <li class="event-day">25</li>
+    <li class="event-day">26</li>
+    <li class="event-day">27</li>
+    <li class="event-day">28</li>
+    <li class="event-day">29</li>
+    <li class="event-day">30</li>
+    <li class="event-day">31</li>
+  </ul>
+
+  <div class="event-list">
+    <h3>Events</h3>
+    <ul id="eventList"></ul>
+  </div>
+
+  <script>
+    var eventDays = document.querySelectorAll('.event-day');
+    var eventList = document.getElementById('eventList');
+
+    eventDays.forEach(function(day) {
+      day.addEventListener('click', function() {
+        var eventText = prompt('Enter event for ' + day.innerText);
+        if (eventText) {
+          var eventItem = document.createElement('li');
+          eventItem.innerText = 'May ' + day.innerText + ': ' + eventText;
+          eventList.appendChild(eventItem);
+        }
+      });
+    });
+  </script>
+</body>
+  </ul>
+  <button type="button" onclick = "window.location.href = 'index.html'" class = "makeTransparent">
+  <img class ="sun" src = "sun.png.png">
+</button> 
+</html>
+

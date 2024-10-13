@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  
+  <style>
+    .makeTransparent{
+      background: none;
+      border:none;
+    }
+
+    .flameItButton{
+      color: orange;
+    }
+    .textArea{
+      left: 50%
+    }
+    .type{
+      left: 50%;
+    }
+
+    .fired{
+      background-color: #ffab65;
+      color: #592800;
+    }
+    @keyframes fadeOut {
+   0% {opacity: 1;}
+   100% {opacity: 0;} 
+} 
+  </style>
+
+  
+</head>
+     
+<body>
+  <div class = "wrapper">
+  <p class = "type">Type below:</p>
+  <div id = "quotes"></div>
+    <div class = "upper">
+      <img src = "thought.png" style = "width:15vw; height: 10vw;"/>
+      <div class = "lower">
+        <textarea class = "textArea" rows="8" cols="50" id = "entry"></textarea>
+      </div>
+    </div>
+  </div>
+<img src = 'fire.png' id = "flame" style = "display:none; width: 35vw; height: 30vw; animation: fadeOut 5s; text-align:center;">
+
+<button class = "fired" onclick = "document.getElementById('entry').style.display = 'none'; document.getElementById('flame').style.display = 'block'; this.style.display = 'none'" >Flame it!</button>
+ <script src="script.js"></script>
+  <button type="button" onclick = "window.location.href = 'index.html'">
+  <img class = "sun" src = "sun.png.png">
+</button>
+</body>
+
+  
+   <button  type="button" id = "flameItButton" onclick = "window.location.href = 'index.html'" class = "makeTransparent">
+ <!-- <img src = "sun.png.png"> -->
+</button>
+
+
+</html>
