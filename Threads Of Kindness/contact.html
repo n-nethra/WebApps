@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://tailwindcss.com/docs/installation" defer></script>
+      <link href="style.css" rel="stylesheet" type="text/css" />
+        <title>Contact</title>
+    <head>
+
+
+    <body>
+      <img class = "logo" onclick="window.location.href = 'index.html'" src = "threads-of-kindness-logo.webp"/>
+        <h1 class="title">Contact</h1>
+        <h2 class = "contact-text">Want to Become a Donor?</h2>
+        <h3 class = "contact-text">Enter Your Contact Information</h3>
+        <br/>
+    <body>
+
+    <form id="form">
+        <label for="Email">Email:</label>
+        <br/>
+        <input type="text" id="Email" name="Email" placeholder="example@gmail.com">
+        <br/>
+        <br/>
+        <label for="Name">Name:</label>
+        <br/>
+        <input type="text" id="Name" name="Name" placeholder="First Name, Last Name">
+        <br/>
+        <br/>
+        <button class="button" type="submit" id="submit">Submit</button>
+    <form>
+
+    <script>
+        const form = document.querySelector("#form")
+        const btn = document.querySelector("#submit")
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyFeLTjEmz76jVGkJQ64u4fTxHYFsyCf9A4O8foiCXM5UaBvDA0T2FtO2893KyulsFx/exec"
+
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            btn.disabled = true
+            btn.innerHTML = "Loading..."
+
+            console.log(form)
+            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+            .then(response => { 
+                btn.disabled = false
+                btn.innerHTML = "Submit"
+                        alert('Success!', response) })
+                    .catch(error => {
+                                btn.disabled = false
+                btn.innerHTML = "Submit"
+                        alert('Error!', error.message)})
+
+            })
+    </script>
+<html>    
