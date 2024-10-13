@@ -1,0 +1,87 @@
+html{
+  padding:5%;
+  background-color: #d7effe;
+  
+}
+
+/* TITLE */
+
+/*title img*/
+.tImage {
+  width: 100%;
+  padding: 10px;
+  background-color: white;
+}
+
+/*title header*/
+.title {
+  text-align: center;
+  color: #90e2fe;
+  font-family: Tahoma;
+  background-color: #29293d;
+  animation-name: titleAnimation;
+  animation-duration: 2s;
+
+  /*Geneva*/
+
+}
+
+@keyframes titleAnimation{
+  0%{background-color:  #d7effe;} 
+  100%{background-color: #29293d;}
+}
+
+
+/* TITLE TEXT */
+.text{
+  font-family: Lucida Sans Unicode;
+  color: #373768;
+  padding:5%;
+  text-align: center; 
+  animation-name: textAnimation;
+  animation-duration: 3s;
+}
+
+
+
+
+/* UPCOMING EVENTS */
+
+/*upcoming events text*/
+.upcomingEvents {
+  font-family: Lucida Sans Unicode;
+  color: #373768;
+  padding:5%;
+  text-align: left; 
+
+  animation-name: textAnimation;
+  animation-duration: 3s;
+  
+}
+
+@keyframes textAnimation{
+  0%{color: #d7effe}
+  30%{color:#d7effe}
+  100%{color:#373768}
+}
+
+/*events header*/
+.events title{
+  height: 100%;
+  width: 100%;
+
+  padding:5%;
+  text-align: center;
+  color: #90e2fe;
+  
+  background-color: darkblue;
+  animation-name: titleAnimation;
+  animation-duration: 2s; 
+  
+}
+
+
+.topBar{
+  font-family: Lucida Sans Unicode;
+  color: #90e2fe;
+}
