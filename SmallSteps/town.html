@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Town Scene</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="game-container">
+    <img src="images/town.webp" id="game-scene" alt="Town Scene" />
+
+    <div class="clickable" id="trash-clickable-game" style="top: 550px; left: 76px; width: 210px; height: 200px;"></div>
+    <div class="clickable" id="car-game" style="top: 600px; right: 250px; width: 350px; height: 300px;"></div>
+    <div class="clickable" id="beach-clickable" style="top: 450px; right: 420px; width: 200px; height: 100px;"></div>
+
+    <div id="girl" style="top: 500px; left: 300px; width: 685px; height: 1147px; position: absolute;">
+        <img src="images/girl.webp" alt="Girl" style="width: 40%; height: 40%; object-fit: fill;">
+    </div>
+
+    <div class="clickable" id="leaf" style="top: 180px; right: 125px; width: 230px; height: 230px;">
+        <img src="images/leaf.webp" alt="Leaf" style="width: 100%; height: 100%; object-fit: fill;">
+    </div>
+
+    <div class="image-container" id = "tb" style="position: absolute; top: 170px; right: 670px; scale:1.2">
+        <img src="images/textbubble.png" style="width: 300px; height: auto; position: absolute; transform: scale(-1, -1);" alt="textbubble">
+        <div class="overlay-text" style="top: 130px; left: 147px">
+            Ew look at all the trash on the ground! And ew, what is that smell?!
+        </div>
+    </div>    
+
+  </div>
+  <script src="trashjs.js"></script>
+</body>
+</html>

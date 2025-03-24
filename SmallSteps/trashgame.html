@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Game</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <img src="images/trash.webp" id="trash-clickable-game" alt="game"/>
+
+        <div class="draggable-container">
+            <img src="images/newspaper.webp" id="drag1" style= "top: 150px; left: 175px; height: 250px; width: 250px;" class="draggable" draggable="true" >
+            <img src="images/paper.webp" id="drag2" style= "top: 500px; left: 400px; height: 200px; width: 200px;" class="draggable" draggable="true" >
+            <img src="images/bottle.webp" id="drag3" style= "top: 240px; left: 1050px; height: 250px; width: 170px;" class="draggable" draggable="true" >
+        </div>
+        <div class="dropzone" id="dropzone1"></div>
+    </div>
+    
+    <div id="scene-bottom">
+        Littering is often seen as a sign of disregard for the environment and a lack of civic responsibility. It is important for individuals to take ownership of their actions and make a conscious effort to dispose of waste properly, so drag this trash into the can!
+    </div>
+    
+    <script src="trashjs.js"></script>
+</body>
+</html>

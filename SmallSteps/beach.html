@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beach Scene</title>
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container" style="scale:1.2">
+        <img src="images/beach.webp" id="choosing-clickable-game" alt="game"/>
+
+        <div class="clickable" id="turtle-clickable-game" style="bottom: 80px; right: 350px; width: 210px; height: 200px; z-index: 10;"></div>
+        <div class="clickable" id="boat-clickable-game" style="top: 250px; right: 50px; width: 210px; height: 200px;"></div>
+
+        <div id="girl" style="top: 300px; left: 300px; width: 685px; height: 1147px; position: absolute;">
+            <img src="images/girl.webp" alt="Girl" style="width: 40%; height: 40%; object-fit: fill;">
+        </div>
+        
+        <div class="clickable" id="leaf" style="top: 100px; right: 350px; width: 230px; height: 230px;">
+            <img src="images/leaf.webp" alt="Leaf" style="width: 100%; height: 100%; object-fit: fill;">
+        </div>
+
+        <div class="image-container" style="position: absolute; top:60px; right: 400px; scale:1.2">
+            <img src="images/textbubble.png" style="width: 300px; height: auto; position: absolute" alt="textbubble">
+            <div class="overlay-text" style="top: 95px; left: 157px">
+                That turtle looks like it needs some help, and what's that black stuff in the water??
+            </div>
+        </div>
+
+    </div>
+    
+    
+    <script src="beachjs.js"></script>
+</body>
+</html>

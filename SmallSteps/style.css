@@ -1,0 +1,179 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: black;
+}
+
+#game-container {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+}
+
+#game-scene {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  cursor: pointer; /* Makes the trash image clickable */
+}
+
+.clickable {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  /*background-color: red;*/
+  
+}
+
+#start-clickable-game{
+  object-fit: contain;
+  position: relative;
+}
+
+#text-box {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  background: rgba(135, 195, 150, 0.5);
+  color: black;
+  font-size: 18px;
+  text-align: center;
+  padding: 15px;
+  border-radius: 10px;
+  font-family: Winky Sans;
+  z-index: 9999 !important; /* Super high to be on top */
+}
+#scene-bottom {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* Keep it centered horizontally */
+  width: 80%;
+  background: rgba(135, 195, 150, 0.5);
+  color: black;
+  font-size: 18px;
+  text-align: center;
+  padding: 15px;
+  border-radius: 10px;
+  font-family: Winky Sans;
+  z-index: 9999 !important; /* Super high to be on top */
+}
+
+#power-meter {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 40px;
+  background: #c80707;
+  border: 2px solid black;
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 10;
+}
+
+#green-zone {
+  position: absolute;
+  top: 0;
+  left: 100px;
+  width: 80px;
+  height: 100%;
+  background: green;
+}
+
+#indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 100%;
+  background: rgb(6, 0, 0);
+  transition: transform 0.05s linear;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.image-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay-text {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 155px;
+  top: 92px;
+  color: black;
+  width: 250px;
+  font-size: 18px;
+  text-align: center;
+  z-index: 10;
+  font-family: Winky Sans;
+}
+
+#trash-clickable-game{
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  
+}
+
+.draggable-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none; /* Ensures the draggable images are above the trash image */
+}
+
+.draggable {
+  position: absolute;
+  width: 100px;
+  cursor: grab;
+  pointer-events: all; /* Allows dragging */
+}
+
+#drag1 { /* Newspaper image positioning */
+  position: absolute;
+  top: -30px; /* Adjust to position on top of trash image */
+  left: 20%;
+}
+
+#drag2 { /* Paper image positioning */
+  position: absolute;
+  top: 40%;
+  left: 50%;
+}
+
+#drag3 { /* Bottle image positioning */
+  position: absolute;
+  top: 60%;
+  left: 80%;
+}
+
+.dropzone {
+  width: 300px;
+  height: 500px;
+  position: absolute;
+  top: 40px;  /* Position it where you want */
+  left: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
