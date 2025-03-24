@@ -1,0 +1,526 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.TreeMap;
+import javax.swing.*;
+import java.awt.Image;
+import javax.sound.sampled.*;
+
+import java.util.Random;
+
+public class TrieDisplay extends JPanel implements KeyListener, ActionListener {
+
+    private JFrame frame;
+    private int size = 30, width = 800, height = 800;
+    private Trie trie;
+    private String word, predicted; // word you are trying to spell printed in large font
+    private char likelyChar; // used for single most likely character
+    private Map<Character, Integer> likelyCharFreqs; // used for storing frequencies
+    private boolean wordsLoaded; // use this to make sure words are all loaded before you start typing
+    private TreeMap<String, Integer> likelyWords; // next likely words to be typed
+    private ArrayList<String> fullText;
+    private Image backgroundImage;
+    private int textWidth;
+    
+    //Game Mode vars
+    /*
+    private boolean gameMode = false;  // Toggle for Fill in the Lyrics
+    private int score = 0;  // Player's score
+    private String currentLine = "";  // Line from lyrics
+    private String missingWord = "";  // The word to guess
+    private String userGuess = "";  // User's current guess
+    private int hintCount = 0;  // Number of hints used
+        // New Game Mode Variables */
+    private String selection;
+        
+    private JButton hintButton;
+    private boolean isGameMode;
+    private String gameLine;
+    private String missingWord;
+    private String userGuess;
+    private int hintCount;
+    private String hint;
+    private String currentLine;
+    private int score;
+
+
+    public TrieDisplay() {
+        frame = new JFrame("Trie Next");
+        frame.setSize(width, height);
+        frame.add(this);
+        frame.addKeyListener(this);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        backgroundImage = new ImageIcon("rosie.jpg").getImage();
+        BackgroundMusic bgMusic = new BackgroundMusic();
+        bgMusic.playMusic("drinksorcoffee.wav");
+
+        // default settings
+        word = "";
+        predicted = "";
+        likelyChar = ' '; // used for single most likely character
+        likelyCharFreqs = new HashMap<Character, Integer>(); // used for storing frequencies
+        likelyWords = new TreeMap<String, Integer>(); // used to store next likely words
+        textWidth = 0; //width of the text
+
+        wordsLoaded = false;
+        fullText = new ArrayList<String>();
+        
+        // Game Mode Initialization
+        isGameMode = false; 
+        userGuess = ""; //the user's guess for the lyric
+        hintCount = 0; //number of hints
+        hint = ""; //revealed hint
+        hintButton = new JButton("Hint"); //hint button
+        score = 0; //initial score for the game
+        currentLine = "";  // Line from lyrics
+        hintButton.setBounds(40, 340, 150, 30); // Position and size
+        hintButton.addActionListener(this); // Make it respond to clicks
+        this.setLayout(null); // Allow absolute positioning
+        this.add(hintButton); // Add button to panel
+
+        selection = s; //change between gamemodes
+
+        trie = new Trie();
+        readFileToTrie("rosie_lyrics.txt");
+
+        wordsLoaded = true; // set flag to true -> indicates program is ready
+        repaint();
+    }
+
+    // all graphics handled in method; don't do calculations here
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g); // setup and background
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, frame.getWidth(), frame.getHeight());
+        g2.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        g2.setFont(new Font("Monospaced", Font.PLAIN, 40)); // header
+        g2.setColor(Color.PINK);
+
+        if (selection.equals("game")){
+
+            g2.drawString("Trie Next: Rosie Edition", 40, 50);
+
+            g2.setFont(new Font("Impact", Font.PLAIN, 30));
+            g2.drawString("Press 'G' to start 'Fill in the Rosie Lyrics'!", 40, 100);
+    
+            g2.setFont(new Font("Monospaced", Font.PLAIN, 20));
+            g2.drawString("Score: " + score, 40, 140);
+    
+            if (isGameMode) {
+                g2.setColor(Color.YELLOW);
+                g2.setFont(new Font("Monospaced", Font.BOLD, 25));
+                g2.drawString("Complete the line:", 40, 200);
+                g2.drawString(gameLine.replace(missingWord, "______"), 40, 230);
+                g2.drawString("Your Guess: " + userGuess, 40, 270);
+                g2.drawString(hint, 40, 310);
+            }
+
+        }
+
+        else if (selection.equals("game")){
+
+            if (wordsLoaded) {
+                g2.drawString("Start Typing: ", 40, 100);
+            } else {
+                g2.drawString("Loading... please wait", 40, 100);
+            }
+
+            // Writing the line
+            g2.setFont(new Font("Impact", Font.PLAIN, 30));
+            g2.drawString(String.join(" ", fullText), 38, 160);
+
+            textWidth = g2.getFontMetrics().stringWidth(String.join(" ", fullText));
+
+            int wordStartX = 48 + textWidth + 10;
+
+            // Colors for word
+            if (trie.contains(word)) {
+                g2.setColor(Color.GREEN);
+            } else {
+                if (likelyChar == '_') {
+                    g2.setColor(Color.RED);
+                } else {
+                    g2.setColor(Color.WHITE);
+                }
+            }
+            g2.drawString(word, wordStartX, 160);
+
+            // Write predicted word in gray (like Google Docs)
+            if (!predicted.isEmpty() && !predicted.equals(word)) {
+                g2.setColor(Color.GRAY);
+                g2.drawString(predicted.substring(word.length()), wordStartX + g2.getFontMetrics().stringWidth(word), 160);
+            }
+
+            // Draw String below here for next most likely letter(s)
+            g2.setFont(new Font("Monospaced", Font.PLAIN, 20));
+            g2.setColor(Color.WHITE);
+            g2.drawString("Most Likely Next Char -> " + likelyChar, 40, 210);
+
+            // ---- NOTE: sort by converting to array, dec, then take top 5 and use StringBuilder
+            List<Map.Entry<Character, Integer>> sortedChars = new ArrayList<>(likelyCharFreqs.entrySet());
+            sortedChars.sort((a, b) -> Integer.compare(b.getValue(), a.getValue())); // Sort in descending order
+
+            StringBuilder freqSB = new StringBuilder();
+            int totalFrequency = 0;
+            int count = 0;
+
+            for (int freq : likelyCharFreqs.values()) {
+                totalFrequency += freq;
+            }
+
+            for (Map.Entry<Character, Integer> entry : sortedChars) { // FIXED: Use sortedChars
+                if (count >= 5) {
+                    break;
+                }
+                int percent = (int) ((entry.getValue() / (double) totalFrequency) * 100);
+                freqSB.append(entry.getKey()).append(" => ").append(percent).append("%, ");
+                count++;
+            }
+
+            if (!likelyCharFreqs.isEmpty()) {
+                freqSB.setLength(freqSB.length() - 2); // Remove the last comma and space
+            }
+
+            g2.setFont(new Font("Monospaced", Font.PLAIN, 13));
+            g2.drawString("Most Likely Next Char Freqs -> " + freqSB.toString(), 40, 250);
+
+            List<Map.Entry<String, Integer>> sortedWords = new ArrayList<>(likelyWords.entrySet());
+            sortedWords.sort((a, b) -> Integer.compare(b.getValue(), a.getValue())); // Sort in descending order
+
+            // Most Likely Next Words printout (percentages)
+            StringBuilder wordsSB = new StringBuilder();
+            count = 0;
+            int totalWordFrequency = 0;
+
+            // Calculate the total frequency of all words
+            for (int freq : likelyWords.values()) {
+                totalWordFrequency += freq;
+            }
+
+            // Append top 5 words with their frequency percentages
+            for (Map.Entry<String, Integer> entry : sortedWords) { // FIXED: Use sortedWords
+                if (count >= 5) {
+                    break;
+                }
+                int percent = (int) ((entry.getValue() / (double) totalWordFrequency) * 100);
+                wordsSB.append(entry.getKey()).append(" => ").append(percent).append("%, ");
+                count++;
+            }
+
+            if (wordsSB.length() > 0) {
+                wordsSB.setLength(wordsSB.length() - 2); // Remove the last comma and space
+            }
+
+            g2.drawString("Most Likely Next Words -> " + wordsSB, 40, 290);
+
+            // If there are no possible next letters, write "No further possibilities"
+            if (likelyCharFreqs.isEmpty()) {
+                g2.setColor(Color.RED);
+                g2.setFont(new Font("Monospaced", Font.BOLD, 20));
+                g2.drawString("No further possibilities", 40, 350);
+            }
+        }
+
+        else{
+            System.out.println("err");
+        }
+
+        repaint();
+        
+    }
+
+    public void keyPressed(KeyEvent e) { // handles key press
+        int keyCode = e.getKeyCode();
+
+        if(selection.equals("game")){
+            if (keyCode == KeyEvent.VK_G) { // Start game mode
+                startGameMode();
+            } 
+            else if (isGameMode) { // Game mode inputs
+                if (keyCode == KeyEvent.VK_BACK_SPACE && !userGuess.isEmpty()) {
+                    userGuess = userGuess.substring(0, userGuess.length() - 1);
+                } else if ((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) || keyCode == KeyEvent.VK_QUOTE) {
+                    userGuess += (keyCode == KeyEvent.VK_QUOTE) ? "'" : KeyEvent.getKeyText(keyCode).toLowerCase();
+    
+                } else if (keyCode == KeyEvent.VK_ENTER) {
+                    checkGuess();
+                } else if (keyCode == KeyEvent.VK_H) {
+                    provideHint();
+                }
+            } 
+        }
+        else if (selection.equals("typing")){
+            // Backspace
+            if (keyCode == KeyEvent.VK_BACK_SPACE) {
+                if (!word.isEmpty()) {
+                    word = word.substring(0, word.length() - 1);
+                } else if (!fullText.isEmpty()) {
+                    word = fullText.get(fullText.size() - 1);
+                    fullText.remove(fullText.size() - 1);
+                }
+                predicted = "";
+            }
+
+            if (textWidth < 700) {  //so it doesnt go over the edge of the frame
+                if (keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z) { // Alphabet keys
+                    word += KeyEvent.getKeyText(keyCode).toLowerCase();
+                }
+
+                if (keyCode == KeyEvent.VK_QUOTE) {
+                    word += "'";
+                }
+                //confirm word
+                if (keyCode == KeyEvent.VK_SPACE) {
+                    if (!word.isEmpty()) {
+                        if (trie.contains(word)) {
+                            fullText.add(word);
+                            word = "";
+                            predicted = "";;
+                        }
+                    }
+                }
+
+                //autocomplete (enter/return)
+                if (keyCode == KeyEvent.VK_ENTER) {// && !predicted.isEmpty()) {
+
+                    word = predicted;
+                    fullText.add(word);
+                    word = "";
+                    predicted = "";
+                }
+
+                // Update predictions
+                if (!word.isEmpty()) {
+                    likelyChar = trie.mostLikelyNextChar(word);
+                    likelyCharFreqs = trie.likelyNextCharFrequency(word);
+                    likelyWords = trie.getWords(word);
+
+                    if (!likelyWords.isEmpty()) {
+                        // Find the word with the highest frequency percentage
+                        int totalFrequency = 0;
+                        for (int freq : likelyWords.values()) {
+                            totalFrequency += freq;
+                        }
+
+                        String mostLikelyWord = "";
+                        int highestPercentage = 0;
+
+                        for (Map.Entry<String, Integer> entry : likelyWords.entrySet()) {
+                            int percent = (int) ((entry.getValue() / (double) totalFrequency) * 100);
+                            if (percent > highestPercentage) {
+                                highestPercentage = percent;
+                                mostLikelyWord = entry.getKey();
+                            }
+                        }
+
+                        predicted = mostLikelyWord;
+                    } else {
+                        predicted = "";
+                    }
+                } else {
+                    likelyChar = ' ';
+                    likelyCharFreqs.clear();
+                    likelyWords.clear();
+                    predicted = "";
+                }
+
+            }
+        }
+
+        repaint();
+    }
+
+
+    private void updatePredictions() {
+        if (!word.isEmpty()) {
+            likelyChar = trie.mostLikelyNextChar(word);
+            likelyCharFreqs = trie.likelyNextCharFrequency(word);
+            likelyWords = trie.getWords(word);
+            predicted = (!likelyWords.isEmpty()) ? likelyWords.firstKey() : "";
+        } else {
+            likelyChar = ' ';
+            likelyCharFreqs.clear();
+            likelyWords.clear();
+            predicted = "";
+        }
+    }
+
+    private void startGameMode() {
+        isGameMode = true;
+        Random rand = new Random();
+        List<String> lines = new ArrayList<>(fullText);
+        gameLine = lines.get(rand.nextInt(lines.size()));
+
+        String[] words = gameLine.split(" ");
+        int missingIndex = rand.nextInt(words.length);
+        missingWord = words[missingIndex];
+        words[missingIndex] = "______";
+        gameLine = String.join(" ", words);
+
+        userGuess = "";
+        hintCount = 0;
+    }
+
+    private void checkGuess() {
+        if (userGuess.equalsIgnoreCase(missingWord)) {
+            score++;
+            isGameMode = false;
+        } else {
+            score--;
+        }
+        startGameMode();
+    }
+
+    private void provideHint() {
+        if (hintCount < missingWord.length()) {
+            hintCount++; // Increase the number of revealed letters
+            hint = "Hint: " + missingWord.substring(0, hintCount);
+        } else {
+            hint = "No more hints!";
+            hintButton.setEnabled(false); // Disable button if no hints left
+        }
+        repaint();
+    }
+
+
+    private ArrayList<String> lyricsLines = new ArrayList<>();
+
+    public void readFileToTrie(String fileName) {
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                line = line.toLowerCase().trim();
+                line = line.replaceAll(",", "");
+                line = line.replaceAll("\\?", "");
+                line = line.replaceAll("-", "");
+                lyricsLines.add(line);
+                String[] dookies = line.split(" ");
+
+                for (String word : dookies) {
+                    trie.insert(word);
+                }
+
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * * empty methods needed for interfaces **
+     */
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == hintButton) {
+            provideHint();
+            frame.requestFocus(); // Ensure the game panel gets keyboard focus back
+        }
+    }
+
+    public static void main(String[] args) {
+
+        JFrame startFrame = new JFrame("Start");
+        startFrame.setSize(600, 600);
+        startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        startFrame.setLayout(null);
+
+        JLabel bg = new JLabel(new ImageIcon("rosie.jfif"));
+        bg.setBounds(0, 0, 600, 600);
+
+        JLabel title = new JLabel("Welcome to Rosie Lyrics!", SwingConstants.CENTER);
+        title.setFont(new Font("Monospaced", Font.BOLD, 30));
+        title.setForeground(Color.PINK);
+        title.setBounds(0, 100, 600, 50);
+
+        JLabel intro = new JLabel("Either type lyrics from rosie's album, or play the lyric guessing game", SwingConstants.CENTER);
+        intro.setFont(new Font("Monospaced", Font.BOLD, 12));
+        intro.setForeground(Color.WHITE);
+        intro.setBounds(0, 150, 600, 50);
+
+        JButton typingButton = new JButton("Typing");
+        typingButton.setFont(new Font("Monospaced", Font.BOLD, 24)); // Slightly larger font
+        typingButton.setBackground(new Color(207, 0, 24)); // Crimson Red for a richer color
+        typingButton.setForeground(Color.WHITE); // White text for better contrast
+        typingButton.setFocusPainted(false); // Removes focus border
+        typingButton.setBorder(BorderFactory.createLineBorder(Color.PINK, 2));
+        typingButton.setBounds(100, 350, 150, 100);
+        
+        typingButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                startFrame.dispose();
+                new TrieDisplay();
+                //make into typing ver.
+            }
+        });
+        
+        JButton gameButton = new JButton("Game");
+        gameButton.setFont(new Font("Monospaced", Font.BOLD, 24)); // Slightly larger font
+        gameButton.setBackground(new Color(207, 0, 24)); // Crimson Red for a richer color
+        gameButton.setForeground(Color.WHITE); // White text for better contrast
+        gameButton.setFocusPainted(false); // Removes focus border
+        gameButton.setBorder(BorderFactory.createLineBorder(Color.PINK, 2));
+        gameButton.setBounds(350, 350, 150, 100);
+        
+        gameButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                startFrame.dispose();
+                new TrieDisplay();
+                //make into game ver.
+            }
+        });
+
+        
+        startFrame.add(title);
+        startFrame.add(intro);
+        startFrame.add(typingButton);
+        startFrame.add(gameButton);
+        startFrame.add(bg); 
+        startFrame.setVisible(true);
+    }
+
+}
+
+class BackgroundMusic {
+
+    private Clip clip;
+
+    public void playMusic(String filepath) {
+        try {
+            File musicFile = new File(filepath);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(musicFile);
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY); //loop music
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+}
